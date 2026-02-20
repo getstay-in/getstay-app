@@ -1,4 +1,4 @@
-import { HostelCard } from "@/components/hostels/hostel-card";
+import { HostelCard } from "@/components/shared/hostel-card";
 
 interface HostelWithProfile {
   _id: string;

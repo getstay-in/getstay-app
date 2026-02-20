@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Space_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode; 
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>

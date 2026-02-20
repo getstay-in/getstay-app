@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { PromoBanner } from "@/components/shared/promo-banner";
-import { HeroSection } from "@/components/shared/hero-section";
-import { HostelsSection } from "@/components/hostels/hostels-section";
+import { PromoBanner } from "@/components/landing-page/promo-banner";
+import { HeroSection } from "@/components/landing-page/hero-section";
+import { HostelsSection } from "@/components/landing-page/hostels-section";
 import { getHostels } from "@/services/hostel.service";
 
 export const metadata: Metadata = {
