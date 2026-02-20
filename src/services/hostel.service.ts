@@ -1,6 +1,7 @@
 import connectDB from '@/lib/mongoose/connection';
 import { Hostel } from '@/lib/mongoose/models/hostel.model';
 import { HostelProfile } from '@/lib/mongoose/models/hostel-profile.model';
+import { Organisation } from '@/lib/mongoose/models/organisation.model';
 
 export interface HostelWithProfile {
   _id: string;
@@ -29,8 +30,17 @@ export interface HostelWithProfile {
 export async function getHostels(): Promise<HostelWithProfile[]> {
   try {
     await connectDB();
-    
-    const hostels = await Hostel.find({})
+
+    const orgIdsWithOnlinePresence = await Organisation.find({
+      isOnlinePresenceEnabled: true,
+    })
+      .select('_id')
+      .lean();
+    const allowedOrgIds = orgIdsWithOnlinePresence.map((o) => o._id);
+
+    const hostels = await Hostel.find({
+      organisation: { $in: allowedOrgIds },
+    })
       .select('name description')
       .lean()
       .limit(8);
