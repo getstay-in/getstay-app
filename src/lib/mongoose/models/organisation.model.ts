@@ -68,11 +68,10 @@ const organisationSchema = new Schema<IOrganisation>(
 );
 
 // Generate unique join code before saving
-organisationSchema.pre('save', function(next) {
+organisationSchema.pre<IOrganisation>('save', function() {
   if (!this.joinCode) {
     this.joinCode = Math.random().toString(36).substring(2, 8).toUpperCase();
   }
-  next();
 });
 
 export const Organisation = (mongoose.models.Organisation as Model<IOrganisation>) ||
