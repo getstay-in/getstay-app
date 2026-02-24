@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { IndianRupee, Package } from "lucide-react";
+import { IndianRupee, Package, MapPin } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-interface RoomCardProps {
+interface RoomLandingCardProps {
   roomId: string;
   name: string;
   description: string;
@@ -14,16 +14,26 @@ interface RoomCardProps {
     name: string;
     description: string;
   }>;
+  hostelName: string;
+  hostelCity?: string;
+  hostelState?: string;
 }
 
-export function RoomCard({
+export function RoomLandingCard({
   roomId,
   name,
   description,
   rent,
   coverImage,
   components,
-}: RoomCardProps) {
+  hostelName,
+  hostelCity,
+  hostelState,
+}: RoomLandingCardProps) {
+  const location = hostelCity && hostelState 
+    ? `${hostelCity}, ${hostelState}`
+    : hostelCity || hostelState || '';
+
   return (
     <Link href={`/room/${roomId}`} className="block">
       <Card className="group overflow-hidden rounded-2xl border border-border bg-background transition-all hover:border-brand-primary/50 hover:shadow-sm">
@@ -35,7 +45,7 @@ export function RoomCard({
               alt={name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             />
           ) : (
             <>
@@ -62,36 +72,36 @@ export function RoomCard({
         
         {/* Card content */}
         <CardContent className="p-4">
-          <h3 className="mb-2 text-lg font-bold text-foreground">
+          <h3 className="mb-1 truncate text-base font-bold text-foreground">
             {name}
           </h3>
-          <p className="mb-3 line-clamp-2 text-sm font-light text-muted-foreground">
-            {description}
+          <p className="mb-2 truncate text-xs font-light text-muted-foreground">
+            {hostelName}
           </p>
+          {location && (
+            <div className="mb-3 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <MapPin className="h-3 w-3" />
+              <span className="truncate">{location}</span>
+            </div>
+          )}
           
           {/* Components */}
           {components.length > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                <Package className="h-3.5 w-3.5" />
-                <span>Includes:</span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {components.slice(0, 4).map((component, idx) => (
-                  <Badge
-                    key={idx}
-                    variant="outline"
-                    className="text-xs font-normal"
-                  >
-                    {component.name}
-                  </Badge>
-                ))}
-                {components.length > 4 && (
-                  <Badge variant="outline" className="text-xs font-normal">
-                    +{components.length - 4} more
-                  </Badge>
-                )}
-              </div>
+            <div className="flex flex-wrap gap-1.5">
+              {components.slice(0, 3).map((component, idx) => (
+                <Badge
+                  key={idx}
+                  variant="outline"
+                  className="text-xs font-normal"
+                >
+                  {component.name}
+                </Badge>
+              ))}
+              {components.length > 3 && (
+                <Badge variant="outline" className="text-xs font-normal">
+                  +{components.length - 3}
+                </Badge>
+              )}
             </div>
           )}
         </CardContent>

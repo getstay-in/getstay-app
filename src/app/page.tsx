@@ -4,7 +4,9 @@ import { Footer } from "@/components/layout/footer";
 import { PromoBanner } from "@/components/landing-page/promo-banner";
 import { HeroSection } from "@/components/landing-page/hero-section";
 import { HostelsSection } from "@/components/landing-page/hostels-section";
+import { RoomsSection } from "@/components/landing-page/rooms-section";
 import { getHostels } from "@/services/hostel.service";
+import { getRoomsForLanding } from "@/services/room-landing.service";
 
 export const metadata: Metadata = {
   title: "GetStay - Explore Hostels in Bhopal | Modern Hostel Booking",
@@ -29,6 +31,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const hostels = await getHostels();
+  const rooms = await getRoomsForLanding('all', 8);
 
   return (
     <div className="min-h-screen bg-background">
@@ -36,6 +39,7 @@ export default async function Home() {
       <PromoBanner />
       <HeroSection />
       <HostelsSection hostels={hostels} />
+      <RoomsSection initialRooms={rooms} />
       <Footer />
     </div>
   );

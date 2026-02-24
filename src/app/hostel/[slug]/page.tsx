@@ -310,6 +310,7 @@ export default async function HostelPage({ params }: HostelPageProps) {
                     {hostel.roomTypes.map((room) => (
                       <RoomCard
                         key={room._id}
+                        roomId={room._id}
                         name={room.name}
                         description={room.description}
                         rent={room.rent}
