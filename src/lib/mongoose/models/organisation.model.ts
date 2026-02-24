@@ -68,7 +68,7 @@ const organisationSchema = new Schema<IOrganisation>(
 );
 
 // Generate unique join code before saving
-organisationSchema.pre<IOrganisation>('save', function() {
+organisationSchema.pre('save', function(next) {
   if (!this.joinCode) {
     this.joinCode = Math.random().toString(36).substring(2, 8).toUpperCase();
   }

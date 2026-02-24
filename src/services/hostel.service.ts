@@ -1,22 +1,21 @@
 import connectDB from '@/lib/mongoose/connection';
-import { Hostel } from '@/lib/mongoose/models/hostel.model';
 import { HostelProfile } from '@/lib/mongoose/models/hostel-profile.model';
-import { Organisation } from '@/lib/mongoose/models/organisation.model';
 
 export interface HostelWithProfile {
   _id: string;
   name: string;
+  slug?: string;
   description?: string;
   profile?: {
     basicInfo: {
       name: string;
-      city: string;
-      state: string;
-      description: string;
+      city?: string;
+      state?: string;
+      description?: string;
     };
     propertyDetails: {
-      totalRooms: number;
-      accommodationType: 'boys' | 'girls' | 'coed' | 'separate';
+      totalRooms?: number;
+      accommodationType?: 'boys' | 'girls' | 'coed' | 'separate';
     };
     media: {
       photos: Array<{
@@ -31,40 +30,76 @@ export async function getHostels(): Promise<HostelWithProfile[]> {
   try {
     await connectDB();
 
-    const orgIdsWithOnlinePresence = await Organisation.find({
+    const hostelProfiles = await HostelProfile.find({
       isOnlinePresenceEnabled: true,
     })
-      .select('_id')
-      .lean();
-    const allowedOrgIds = orgIdsWithOnlinePresence.map((o) => o._id);
-
-    const hostels = await Hostel.find({
-      organisation: { $in: allowedOrgIds },
-    })
-      .select('name description')
+      .select('hostel slug basicInfo propertyDetails media')
       .lean()
       .limit(8);
 
-    const hostelIds = hostels.map(h => h._id);
-    
-    const profiles = await HostelProfile.find({
-      hostel: { $in: hostelIds }
-    })
-      .select('hostel basicInfo propertyDetails media')
-      .lean();
-
-    const profileMap = new Map(
-      profiles.map(p => [p.hostel.toString(), p])
-    );
-
-    return hostels.map(hostel => ({
-      _id: hostel._id.toString(),
-      name: hostel.name,
-      description: hostel.description,
-      profile: profileMap.get(hostel._id.toString()),
+    return hostelProfiles.map(profile => ({
+      _id: profile.hostel.toString(),
+      name: profile.basicInfo.name,
+      slug: profile.slug,
+      description: profile.basicInfo.description,
+      profile: {
+        basicInfo: profile.basicInfo,
+        propertyDetails: profile.propertyDetails,
+        media: profile.media,
+      },
     }));
   } catch (error) {
     console.error('Error fetching hostels:', error);
     return [];
+  }
+}
+
+export async function getHostelSlugs(): Promise<string[]> {
+  try {
+    await connectDB();
+
+    const hostelProfiles = await HostelProfile.find({
+      isOnlinePresenceEnabled: true,
+      slug: { $exists: true, $ne: null },
+    })
+      .select('slug')
+      .lean();
+
+    return hostelProfiles.map(profile => profile.slug).filter(Boolean) as string[];
+  } catch (error) {
+    console.error('Error fetching hostel slugs:', error);
+    return [];
+  }
+}
+
+export async function getHostelBySlug(slug: string): Promise<HostelWithProfile | null> {
+  try {
+    await connectDB();
+
+    const profile = await HostelProfile.findOne({
+      slug,
+      isOnlinePresenceEnabled: true,
+    })
+      .select('hostel slug basicInfo propertyDetails media locationInfo amenities safetyFeatures')
+      .lean();
+
+    if (!profile) {
+      return null;
+    }
+
+    return {
+      _id: profile.hostel.toString(),
+      name: profile.basicInfo.name,
+      slug: profile.slug,
+      description: profile.basicInfo.description,
+      profile: {
+        basicInfo: profile.basicInfo,
+        propertyDetails: profile.propertyDetails,
+        media: profile.media,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching hostel by slug:', error);
+    return null;
   }
 }

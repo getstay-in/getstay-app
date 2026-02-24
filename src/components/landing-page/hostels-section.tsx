@@ -3,17 +3,18 @@ import { HostelCard } from "@/components/shared/hostel-card";
 interface HostelWithProfile {
   _id: string;
   name: string;
+  slug?: string;
   description?: string;
   profile?: {
     basicInfo: {
       name: string;
-      city: string;
-      state: string;
-      description: string;
+      city?: string;
+      state?: string;
+      description?: string;
     };
     propertyDetails: {
-      totalRooms: number;
-      accommodationType: 'boys' | 'girls' | 'coed' | 'separate';
+      totalRooms?: number;
+      accommodationType?: 'boys' | 'girls' | 'coed' | 'separate';
     };
     media: {
       photos: Array<{
@@ -48,6 +49,7 @@ export function HostelsSection({ hostels }: HostelsSectionProps) {
             hostels.map((hostel) => (
               <HostelCard
                 key={hostel._id}
+                slug={hostel.slug}
                 name={hostel.name.length > 25 ? `${hostel.name.slice(0, 22)}...` : hostel.name}
                 subtitle={hostel.profile?.basicInfo?.name || hostel.description}
                 city={hostel.profile?.basicInfo?.city || "Bhopal"}

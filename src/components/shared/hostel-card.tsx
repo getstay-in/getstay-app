@@ -2,8 +2,10 @@ import { MapPin, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
 
 interface HostelCardProps {
+  slug?: string;
   name: string;
   subtitle?: string;
   city: string;
@@ -14,6 +16,7 @@ interface HostelCardProps {
 }
 
 export function HostelCard({
+  slug,
   name,
   subtitle,
   city,
@@ -25,7 +28,7 @@ export function HostelCard({
   const displayType = accommodationType === 'coed' ? 'CO-ED' : accommodationType.toUpperCase();
   const location = state ? `${city}, ${state}` : city;
 
-  return (
+  const cardContent = (
     <Card className="group overflow-hidden rounded-2xl border border-border bg-background transition-all hover:border-brand-primary/50 hover:shadow-sm">
       {/* Image section */}
       <div className="relative h-44 overflow-hidden bg-muted">
@@ -82,4 +85,14 @@ export function HostelCard({
       </CardContent>
     </Card>
   );
+
+  if (slug) {
+    return (
+      <Link href={`/hostel/${slug}`} className="block">
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return cardContent;
 }
