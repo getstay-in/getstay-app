@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/footer";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RoomCard } from "@/components/hostel/room-card";
+import { DescriptionCard } from "@/components/shared/description-card";
 import { getHostelDetailBySlug, getHostelSlugsForSSG } from "@/services/hostel-detail.service";
 
 interface HostelPageProps {
@@ -253,9 +254,9 @@ export default async function HostelPage({ params }: HostelPageProps) {
 
           {/* Image Gallery */}
           {hostel.media.photos.length > 0 && (
-            <div className="grid gap-2 sm:grid-cols-4" itemScope itemType="https://schema.org/ImageGallery">
+            <div className="grid gap-2 sm:grid-cols-4 sm:grid-rows-2">
               {mainPhoto && (
-                <div className="relative h-64 overflow-hidden rounded-lg sm:col-span-2 sm:row-span-2 sm:h-full">
+                <div className="relative h-64 overflow-hidden rounded-lg sm:col-span-2 sm:row-span-2 sm:h-[400px]">
                   <Image
                     src={mainPhoto.url}
                     alt={`${hostel.basicInfo.name} - ${mainPhoto.title}`}
@@ -267,7 +268,7 @@ export default async function HostelPage({ params }: HostelPageProps) {
                 </div>
               )}
               {otherPhotos.slice(0, 4).map((photo, idx) => (
-                <div key={idx} className="relative h-32 overflow-hidden rounded-lg sm:h-full">
+                <div key={idx} className="relative h-32 overflow-hidden rounded-lg sm:h-[196px]">
                   <Image
                     src={photo.url}
                     alt={`${hostel.basicInfo.name} - ${photo.title}`}
@@ -283,14 +284,7 @@ export default async function HostelPage({ params }: HostelPageProps) {
 
         {/* Description */}
         {hostel.basicInfo.description && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>About</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground" itemProp="description">{hostel.basicInfo.description}</p>
-            </CardContent>
-          </Card>
+          <DescriptionCard description={hostel.basicInfo.description} />
         )}
 
         <div className="grid gap-6 lg:grid-cols-3">

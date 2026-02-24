@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/footer";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { DescriptionCard } from "@/components/shared/description-card";
 import { getRoomById, getAllRoomIds } from "@/services/room-detail.service";
 
 interface RoomPageProps {
@@ -220,9 +221,9 @@ export default async function RoomPage({ params }: RoomPageProps) {
 
           {/* Image Gallery */}
           {room.images.length > 0 && (
-            <div className="grid gap-2 sm:grid-cols-4">
+            <div className="grid gap-2 sm:grid-cols-4 sm:grid-rows-2">
               {coverImage && (
-                <div className="relative h-64 overflow-hidden rounded-lg sm:col-span-2 sm:row-span-2 sm:h-full">
+                <div className="relative h-64 overflow-hidden rounded-lg sm:col-span-2 sm:row-span-2 sm:h-[400px]">
                   <Image
                     src={coverImage.url}
                     alt={coverImage.title}
@@ -233,7 +234,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
                 </div>
               )}
               {otherImages.slice(0, 4).map((image, idx) => (
-                <div key={idx} className="relative h-32 overflow-hidden rounded-lg sm:h-full">
+                <div key={idx} className="relative h-32 overflow-hidden rounded-lg sm:h-[196px]">
                   <Image
                     src={image.url}
                     alt={image.title}
@@ -250,14 +251,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
           {/* Main Content */}
           <div className="space-y-6 lg:col-span-2">
             {/* Description */}
-            <Card>
-              <CardHeader>
-                <CardTitle>About This Room</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">{room.description}</p>
-              </CardContent>
-            </Card>
+            <DescriptionCard description={room.description} />
 
             {/* Components/Amenities */}
             {room.components.length > 0 && (
