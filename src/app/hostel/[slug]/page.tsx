@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { MapPin, Phone, Mail, Building2, Users, Calendar, Home, Shield, Wifi } from "lucide-react";
+import { MapPin, Phone, Mail, Building2, Users, Calendar, Home, Shield, Wifi, Bed } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RoomCard } from "@/components/hostel/room-card";
 import { getHostelDetailBySlug, getHostelSlugsForSSG } from "@/services/hostel-detail.service";
 
 interface HostelPageProps {
@@ -129,6 +130,32 @@ export default async function HostelPage({ params }: HostelPageProps) {
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Main Content */}
           <div className="space-y-6 lg:col-span-2">
+            {/* Available Rooms */}
+            {hostel.roomTypes.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Bed className="h-5 w-5" />
+                    Available Rooms
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {hostel.roomTypes.map((room) => (
+                      <RoomCard
+                        key={room._id}
+                        name={room.name}
+                        description={room.description}
+                        rent={room.rent}
+                        coverImage={room.images.find(img => img.isCover)?.url || room.images[0]?.url}
+                        components={room.components}
+                      />
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Property Details */}
             <Card>
               <CardHeader>
