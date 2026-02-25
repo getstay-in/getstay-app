@@ -5,6 +5,8 @@ import { PromoBanner } from "@/components/landing-page/promo-banner";
 import { HeroSection } from "@/components/landing-page/hero-section";
 import { HostelsSection } from "@/components/landing-page/hostels-section";
 import { RoomsSection } from "@/components/landing-page/rooms-section";
+import { WhyChooseSection } from "@/components/landing-page/why-choose-section";
+import { LocationSection } from "@/components/landing-page/location-section";
 import { getHostels } from "@/services/hostel.service";
 import { getRoomsForLanding } from "@/services/room-landing.service";
 
@@ -40,6 +42,8 @@ export default async function Home() {
       <HeroSection />
       <HostelsSection hostels={hostels} />
       <RoomsSection initialRooms={rooms} />
+      <WhyChooseSection />
+      <LocationSection />
       <Footer />
     </div>
   );
