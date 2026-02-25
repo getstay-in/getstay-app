@@ -47,10 +47,10 @@ function parseSearchQuery(query: string) {
   
   // Extract location
   const locationMatch = lowerQuery.match(/in\s+([a-z\s]+?)(?:\s|,|$)/i);
-  const location = locationMatch ? locationMatch[1].trim() : null;
+  const location = locationMatch ? locationMatch[1].trim() : undefined;
   
   // Extract room type (single, double, triple, sharing)
-  let roomType = null;
+  let roomType: string | undefined = undefined;
   if (lowerQuery.includes('single') || lowerQuery.includes('1 sharing')) {
     roomType = 'single';
   } else if (lowerQuery.includes('double') || lowerQuery.includes('2 sharing')) {
@@ -62,7 +62,7 @@ function parseSearchQuery(query: string) {
   }
   
   // Extract accommodation type
-  let accommodationType = null;
+  let accommodationType: string | undefined = undefined;
   if (lowerQuery.includes('boys') || lowerQuery.includes('boy')) {
     accommodationType = 'boys';
   } else if (lowerQuery.includes('girls') || lowerQuery.includes('girl')) {
