@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Search, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
-export function Header() {
+function HeaderContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -120,5 +120,21 @@ export function Header() {
         )}
       </div>
     </header>
+  );
+}
+
+export function Header() {
+  return (
+    <Suspense fallback={
+      <header className="border-b border-border bg-background">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-8 lg:px-12">
+          <h1 className="text-2xl font-light tracking-tight">
+            get<span className="font-mono font-bold text-brand-primary">stay</span>
+          </h1>
+        </div>
+      </header>
+    }>
+      <HeaderContent />
+    </Suspense>
   );
 }

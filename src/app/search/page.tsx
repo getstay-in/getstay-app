@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Header } from "@/components/layout/header";
@@ -45,7 +45,7 @@ interface SearchResults {
   };
 }
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const queryParam = searchParams.get('q') || '';
 
@@ -99,10 +99,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Error State */}
         {error && (
           <div className="mx-auto max-w-2xl rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">
@@ -231,7 +228,22 @@ export default function SearchPage() {
           </div>
         )}
       </main>
-      
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <Suspense fallback={
+        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
+          </div>
+        </main>
+      }>
+        <SearchContent />
+      </Suspense>
       <Footer />
     </div>
   );

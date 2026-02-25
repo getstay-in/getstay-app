@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { MapPin, Building2, Users, TrendingDown, Award } from "lucide-react";
+import { MapPin, Building2, Users, Award } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { HostelCard } from "@/components/shared/hostel-card";
 import { getCityBySlug, getHostelsByCity, getCitiesWithHostels } from "@/services/city.service";
 

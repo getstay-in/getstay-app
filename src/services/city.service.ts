@@ -131,7 +131,7 @@ export async function getHostelsByCity(
     }
 
     let hostels = await HostelProfile.find(query)
-      .select('slug basicInfo propertyDetails media')
+      .select('hostel slug basicInfo propertyDetails media')
       .lean()
       .limit(limit);
 
@@ -140,7 +140,7 @@ export async function getHostelsByCity(
       // Import RoomType here to avoid circular dependency
       const { RoomType } = await import('@/lib/mongoose/models/room-type.model');
       
-      const hostelIds = hostels.map(h => h.hostel.toString());
+      const hostelIds = hostels.map(h => h.hostel?.toString()).filter(Boolean) as string[];
       const roomTypes = await RoomType.find({ hostelId: { $in: hostelIds } })
         .select('hostelId rent')
         .lean();
@@ -155,10 +155,10 @@ export async function getHostelsByCity(
       // Filter and sort based on category
       if (category === 'affordable') {
         hostels = hostels
-          .filter(h => rentMap.has(h.hostel.toString()))
+          .filter(h => h.hostel && rentMap.has(h.hostel.toString()))
           .sort((a, b) => {
-            const rentA = rentMap.get(a.hostel.toString()) || Infinity;
-            const rentB = rentMap.get(b.hostel.toString()) || Infinity;
+            const rentA = rentMap.get(a.hostel!.toString()) || Infinity;
+            const rentB = rentMap.get(b.hostel!.toString()) || Infinity;
             return rentA - rentB;
           })
           .slice(0, limit);
@@ -185,7 +185,7 @@ export async function getHostelsByCity(
         accommodationType: h.propertyDetails?.accommodationType,
         totalRooms: h.propertyDetails?.totalRooms,
         mainPhoto: h.media?.photos?.find(p => p.isMain)?.url || h.media?.photos?.[0]?.url,
-        minRent: rentMap.get(h.hostel.toString()),
+        minRent: h.hostel ? rentMap.get(h.hostel.toString()) : undefined,
       }));
     }
 
