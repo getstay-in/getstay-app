@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { HostelCard } from "@/components/shared/hostel-card";
 import { RoomLandingCard } from "@/components/shared/room-landing-card";
+import { PopularLinksSection } from "@/components/shared/popular-links-section";
 
 interface SearchHostelResult {
   _id: string;
@@ -215,17 +216,25 @@ function SearchContent() {
                 </p>
               </div>
             )}
+
+            {/* Popular Links Section */}
+            <PopularLinksSection />
           </div>
         )}
 
         {/* Initial State */}
         {!results && !isLoading && !error && (
-          <div className="py-12 text-center">
-            <p className="mb-2 text-lg font-medium">Start searching</p>
-            <p className="text-sm text-muted-foreground">
-              Use the search bar above to find hostels and rooms
-            </p>
-          </div>
+          <>
+            <div className="py-12 text-center">
+              <p className="mb-2 text-lg font-medium">Start searching</p>
+              <p className="text-sm text-muted-foreground">
+                Use the search bar above to find hostels and rooms
+              </p>
+            </div>
+            
+            {/* Popular Links Section */}
+            <PopularLinksSection />
+          </>
         )}
       </main>
   );

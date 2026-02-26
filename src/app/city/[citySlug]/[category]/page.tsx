@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { HostelCard } from "@/components/shared/hostel-card";
+import { RelatedLinksSection } from "@/components/city/related-links-section";
 import { 
   getCityBySlug, 
   getHostelsByCity, 
@@ -255,6 +256,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </p>
           </CardContent>
         </Card>
+
+        {/* Related Links Section */}
+        <div className="mt-8">
+          <RelatedLinksSection 
+            cityName={city.name} 
+            citySlug={citySlug}
+            state={city.state}
+          />
+        </div>
       </main>
       
       <Footer />

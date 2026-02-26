@@ -68,7 +68,7 @@ function HeaderContent({ pageTitle, showBackButton = false }: HeaderProps) {
 
   return (
     <header className="border-b border-border bg-background">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-8 lg:px-12">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
         {/* Mobile Search Expanded View - Only show on mobile when expanded */}
         {isMobileSearchOpen && (
           <div className="flex w-full items-center gap-2 md:hidden">

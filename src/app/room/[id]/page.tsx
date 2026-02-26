@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Phone, Mail, IndianRupee, Package, ArrowLeft, Building2 } from "lucide-react";
+import { MapPin, Phone, Mail, IndianRupee, Building2 } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DescriptionCard } from "@/components/shared/description-card";
+import { RoomActionButtons } from "@/components/room/room-action-buttons";
+import { RoomComponentsGrid } from "@/components/room/room-components-grid";
+import { RelatedLinksSection } from "@/components/city/related-links-section";
 import { getRoomById, getAllRoomIds } from "@/services/room-detail.service";
 
 interface RoomPageProps {
@@ -158,26 +160,35 @@ export default async function RoomPage({ params }: RoomPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
 
-      <Header pageTitle={room.name} showBackButton={true} />
+      <Header pageTitle={room.name} showBackButton={false} />
       
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Back Button */}
-        <Link href={`/hostel/${room.hostel.slug}`}>
-          <Button variant="ghost" className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to {room.hostel.name}
-          </Button>
-        </Link>
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        {/* Hero Section with Room Info */}
+        <div className="mb-6 overflow-hidden rounded-xl border border-border hover:border-brand-primary/50 transition-colors">
+          <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:gap-6 lg:p-6">
+            {/* Room Cover Image */}
+            {coverImage && (
+              <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-lg border border-border sm:w-40 lg:w-56">
+                <Image
+                  src={coverImage.url}
+                  alt={coverImage.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            )}
 
-        {/* Hero Section */}
-        <div className="mb-8">
-          <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <h1 className="mb-2 text-3xl font-bold sm:text-4xl">{room.name}</h1>
-              <div className="flex flex-wrap items-center gap-3">
+            {/* Room Info */}
+            <div className="flex-1 min-w-0">
+              <h1 className="mb-2 text-2xl font-light sm:text-3xl lg:text-4xl">
+                {room.name}
+              </h1>
+              
+              <div className="flex flex-wrap items-center gap-2 mb-2">
                 <Link 
                   href={`/hostel/${room.hostel.slug}`}
-                  className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground"
+                  className="flex items-center gap-1.5 text-sm font-light text-muted-foreground hover:text-brand-primary transition-colors"
                 >
                   <Building2 className="h-4 w-4" />
                   <span>{room.hostel.name}</span>
@@ -185,77 +196,121 @@ export default async function RoomPage({ params }: RoomPageProps) {
                 {location && (
                   <>
                     <span className="text-muted-foreground">•</span>
-                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                    <div className="flex items-center gap-1.5 text-sm font-light text-muted-foreground">
                       <MapPin className="h-4 w-4" />
                       <span>{location}</span>
                     </div>
                   </>
                 )}
               </div>
-            </div>
-            <div className="text-right">
-              <div className="mb-1 text-3xl font-bold text-brand-primary">
-                <IndianRupee className="inline h-6 w-6" />
-                {room.rent.toLocaleString('en-IN')}
+
+              {/* Price Badge */}
+              <div className="inline-flex items-baseline gap-2 rounded-lg border border-brand-primary bg-brand-primary/5 px-3 py-1.5 mb-2">
+                <IndianRupee className="h-4 w-4 text-brand-primary" />
+                <span className="text-xl font-bold text-brand-primary">
+                  {room.rent.toLocaleString('en-IN')}
+                </span>
+                <span className="text-xs font-light text-muted-foreground">/month</span>
               </div>
-              <p className="text-sm text-muted-foreground">per month</p>
+
+              {/* Action Buttons */}
+              <RoomActionButtons
+                roomName={room.name}
+                hostelName={room.hostel.name}
+                hostelSlug={room.hostel.slug}
+              />
             </div>
           </div>
-
-          {/* Image Gallery */}
-          {room.images.length > 0 && (
-            <div className="grid gap-2 sm:grid-cols-4 sm:grid-rows-2">
-              {coverImage && (
-                <div className="relative h-64 overflow-hidden rounded-lg sm:col-span-2 sm:row-span-2 sm:h-[400px]">
-                  <Image
-                    src={coverImage.url}
-                    alt={coverImage.title}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-              )}
-              {otherImages.slice(0, 4).map((image, idx) => (
-                <div key={idx} className="relative h-32 overflow-hidden rounded-lg sm:h-[196px]">
-                  <Image
-                    src={image.url}
-                    alt={image.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        {/* Image Gallery */}
+        {otherImages.length > 0 && (
+          <div className="mb-6 grid gap-2 sm:grid-cols-4">
+            {otherImages.slice(0, 4).map((image, idx) => (
+              <div key={idx} className="relative h-40 overflow-hidden rounded-lg border border-border hover:border-brand-primary/50 transition-colors">
+                <Image
+                  src={image.url}
+                  alt={image.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="grid gap-4 lg:grid-cols-3">
           {/* Main Content */}
-          <div className="space-y-6 lg:col-span-2">
+          <div className="space-y-4 lg:col-span-2">
             {/* Description */}
             <DescriptionCard description={room.description} />
 
             {/* Components/Amenities */}
             {room.components.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Package className="h-5 w-5" />
-                    What's Included
-                  </CardTitle>
+              <RoomComponentsGrid components={room.components} />
+            )}
+
+            {/* Hostel Information */}
+            {room.hostel.amenities && room.hostel.amenities.length > 0 && (
+              <Card className="rounded-xl border border-border hover:border-brand-primary/50 transition-colors overflow-hidden">
+                {/* Hostel Banner */}
+                {room.hostel.banner && (
+                  <div className="relative h-32 w-full overflow-hidden border-b border-border">
+                    <Image
+                      src={room.hostel.banner.url}
+                      alt={`${room.hostel.name} - Banner`}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute bottom-3 left-4 right-4">
+                      <h3 className="text-base font-bold text-white sm:text-lg">
+                        {room.hostel.name}
+                      </h3>
+                    </div>
+                  </div>
+                )}
+                
+                <CardHeader className="p-4 sm:p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <CardTitle className="text-base font-bold sm:text-lg mb-1">
+                        Hostel <span className="text-brand-primary">Amenities</span>
+                      </CardTitle>
+                      <p className="text-xs font-light text-muted-foreground">
+                        Available facilities at this hostel
+                      </p>
+                    </div>
+                    <Link href={`/hostel/${room.hostel.slug}`}>
+                      <Button variant="outline" size="sm" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-brand-white font-bold text-xs">
+                        View Details
+                      </Button>
+                    </Link>
+                  </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {room.components.map((component) => (
-                      <div key={component._id} className="flex items-start gap-3 rounded-lg border border-border p-3">
-                        <div className="mt-1 h-2 w-2 rounded-full bg-brand-primary" />
-                        <div>
-                          <p className="font-medium">{component.name}</p>
-                          <p className="text-sm text-muted-foreground">{component.description}</p>
-                        </div>
+                <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
+                  <div className="flex flex-wrap gap-2">
+                    {room.hostel.amenities.filter(a => a.available).slice(0, 8).map((amenity, idx) => (
+                      <div
+                        key={idx}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-gradient-to-r from-background to-muted/30 px-3 py-1.5 transition-all hover:border-brand-primary/50"
+                        title={amenity.description}
+                      >
+                        <div className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
+                        <span className="whitespace-nowrap text-xs font-bold text-foreground">
+                          {amenity.name}
+                        </span>
                       </div>
                     ))}
+                    {room.hostel.amenities.filter(a => a.available).length > 8 && (
+                      <Link href={`/hostel/${room.hostel.slug}`}>
+                        <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-primary bg-brand-primary/5 px-3 py-1.5 transition-all hover:bg-brand-primary/10">
+                          <span className="whitespace-nowrap text-xs font-bold text-brand-primary">
+                            +{room.hostel.amenities.filter(a => a.available).length - 8} more
+                          </span>
+                        </div>
+                      </Link>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -263,62 +318,62 @@ export default async function RoomPage({ params }: RoomPageProps) {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Booking Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Book This Room</CardTitle>
+            <Card className="rounded-xl border border-border hover:border-brand-primary/50 transition-colors">
+              <CardHeader className="p-4">
+                <CardTitle className="text-base font-bold sm:text-lg">Book This Room</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="rounded-lg bg-muted p-4">
-                  <div className="mb-2 flex items-baseline gap-2">
-                    <span className="text-3xl font-bold">
-                      <IndianRupee className="inline h-5 w-5" />
+              <CardContent className="space-y-3 p-4 pt-0">
+                <div className="rounded-lg border border-brand-primary/20 bg-brand-primary/5 p-3">
+                  <div className="mb-1 flex items-baseline gap-2">
+                    <IndianRupee className="h-4 w-4 text-brand-primary" />
+                    <span className="text-2xl font-bold text-brand-primary">
                       {room.rent.toLocaleString('en-IN')}
                     </span>
-                    <span className="text-sm text-muted-foreground">/month</span>
+                    <span className="text-xs font-light text-muted-foreground">/month</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">Inclusive of all taxes</p>
+                  <p className="text-xs font-light text-muted-foreground">Inclusive of all taxes</p>
                 </div>
-                <Button className="w-full" size="lg">
+                <Button className="w-full bg-brand-primary text-brand-white hover:bg-brand-primary/90 font-bold" size="lg">
                   Book Now
                 </Button>
-                <Button variant="outline" className="w-full" size="lg">
+                <Button variant="outline" className="w-full border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-brand-white font-bold" size="lg">
                   Schedule Visit
                 </Button>
               </CardContent>
             </Card>
 
             {/* Hostel Contact */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Contact Hostel</CardTitle>
+            <Card className="rounded-xl border border-border hover:border-brand-primary/50 transition-colors" data-section="contact">
+              <CardHeader className="p-4">
+                <CardTitle className="text-base font-bold sm:text-lg">Contact Hostel</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-3 p-4 pt-0">
                 <div>
-                  <p className="mb-1 font-medium">{room.hostel.name}</p>
+                  <p className="mb-1 font-bold text-sm">{room.hostel.name}</p>
                   {room.hostel.address && (
-                    <p className="text-sm text-muted-foreground">{room.hostel.address}</p>
+                    <p className="text-xs font-light text-muted-foreground">{room.hostel.address}</p>
                   )}
                 </div>
                 {room.hostel.contactNumber && (
                   <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <a href={`tel:${room.hostel.contactNumber}`} className="text-sm hover:underline">
+                    <Phone className="h-3.5 w-3.5 text-brand-primary" />
+                    <a href={`tel:${room.hostel.contactNumber}`} className="text-xs font-light hover:text-brand-primary transition-colors">
                       {room.hostel.contactNumber}
                     </a>
                   </div>
                 )}
                 {room.hostel.email && (
                   <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <a href={`mailto:${room.hostel.email}`} className="text-sm hover:underline">
+                    <Mail className="h-3.5 w-3.5 text-brand-primary" />
+                    <a href={`mailto:${room.hostel.email}`} className="text-xs font-light hover:text-brand-primary transition-colors">
                       {room.hostel.email}
                     </a>
                   </div>
                 )}
                 <Link href={`/hostel/${room.hostel.slug}`}>
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-brand-white font-bold text-sm">
                     View Hostel Details
                   </Button>
                 </Link>
@@ -326,6 +381,96 @@ export default async function RoomPage({ params }: RoomPageProps) {
             </Card>
           </div>
         </div>
+
+        {/* Recommendations Section */}
+        {((room.similarRooms && room.similarRooms.length > 0) || (room.otherHostels && room.otherHostels.length > 0)) && (
+          <div className="mt-8 space-y-6">
+            {/* Similar Rooms */}
+            {room.similarRooms && room.similarRooms.length > 0 && (
+              <div>
+                <h2 className="mb-4 text-xl font-bold sm:text-2xl">
+                  Similar <span className="text-brand-primary">Rooms</span>
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {room.similarRooms.map((similarRoom) => (
+                    <Link key={similarRoom._id} href={`/room/${similarRoom._id}`}>
+                      <Card className="group overflow-hidden rounded-xl border border-border hover:border-brand-primary/50 transition-all">
+                        <div className="relative h-40 w-full overflow-hidden bg-muted">
+                          {similarRoom.coverImage ? (
+                            <Image
+                              src={similarRoom.coverImage}
+                              alt={similarRoom.name}
+                              fill
+                              className="object-cover transition-transform group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center">
+                              <Building2 className="h-12 w-12 text-muted-foreground/30" />
+                            </div>
+                          )}
+                        </div>
+                        <CardContent className="p-3">
+                          <h3 className="mb-2 text-sm font-bold line-clamp-1">{similarRoom.name}</h3>
+                          <div className="flex items-baseline gap-1">
+                            <IndianRupee className="h-3 w-3 text-brand-primary" />
+                            <span className="text-base font-bold text-brand-primary">
+                              {similarRoom.rent.toLocaleString('en-IN')}
+                            </span>
+                            <span className="text-xs font-light text-muted-foreground">/mo</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Other Hostels */}
+            {room.otherHostels && room.otherHostels.length > 0 && (
+              <div>
+                <h2 className="mb-4 text-xl font-bold sm:text-2xl">
+                  Other <span className="text-brand-primary">Hostels</span> in {room.hostel.city}
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {room.otherHostels.map((hostel) => (
+                    <Link key={hostel._id} href={`/hostel/${hostel.slug}`}>
+                      <Card className="group overflow-hidden rounded-xl border border-border hover:border-brand-primary/50 transition-all">
+                        <div className="relative h-40 w-full overflow-hidden bg-muted">
+                          {hostel.coverImage ? (
+                            <Image
+                              src={hostel.coverImage}
+                              alt={hostel.name}
+                              fill
+                              className="object-cover transition-transform group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center">
+                              <Building2 className="h-12 w-12 text-muted-foreground/30" />
+                            </div>
+                          )}
+                        </div>
+                        <CardContent className="p-3">
+                          <h3 className="mb-1 text-sm font-bold line-clamp-1">{hostel.name}</h3>
+                          <p className="text-xs font-light text-muted-foreground">{hostel.city}</p>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Related Links Section */}
+        {room.hostel.city && (
+          <RelatedLinksSection
+            cityName={room.hostel.city}
+            citySlug={room.hostel.city.toLowerCase().replace(/\s+/g, '-')}
+            state={room.hostel.state}
+          />
+        )}
       </main>
       
       <Footer />

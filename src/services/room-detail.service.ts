@@ -29,7 +29,28 @@ export interface RoomDetailData {
     address?: string;
     contactNumber?: string;
     email?: string;
+    banner?: {
+      url: string;
+    };
+    amenities?: Array<{
+      name: string;
+      description?: string;
+      available: boolean;
+    }>;
   };
+  similarRooms?: Array<{
+    _id: string;
+    name: string;
+    rent: number;
+    coverImage?: string;
+  }>;
+  otherHostels?: Array<{
+    _id: string;
+    slug: string;
+    name: string;
+    city?: string;
+    coverImage?: string;
+  }>;
 }
 
 export async function getRoomById(roomId: string): Promise<RoomDetailData | null> {
@@ -51,12 +72,31 @@ export async function getRoomById(roomId: string): Promise<RoomDetailData | null
 
     // Fetch hostel profile
     const hostelProfile = await HostelProfile.findOne({ hostel: room.hostelId })
-      .select('slug basicInfo')
+      .select('slug basicInfo amenities media')
       .lean();
 
     if (!hostelProfile) {
       return null;
     }
+
+    // Fetch similar rooms from the same hostel (excluding current room)
+    const similarRooms = await RoomType.find({ 
+      hostelId: room.hostelId,
+      _id: { $ne: room._id }
+    })
+      .select('name rent images')
+      .limit(4)
+      .lean();
+
+    // Fetch other hostels in the same city
+    const otherHostelProfiles = await HostelProfile.find({
+      'basicInfo.city': hostelProfile.basicInfo.city,
+      hostel: { $ne: room.hostelId },
+      isOnlinePresenceEnabled: true,
+    })
+      .select('slug basicInfo media hostel')
+      .limit(4)
+      .lean();
 
     return {
       _id: room._id.toString(),
@@ -78,7 +118,30 @@ export async function getRoomById(roomId: string): Promise<RoomDetailData | null
         address: hostelProfile.basicInfo.address,
         contactNumber: hostelProfile.basicInfo.contactNumber,
         email: hostelProfile.basicInfo.email,
+        banner: hostelProfile.media?.banner ? {
+          url: hostelProfile.media.banner.url,
+        } : undefined,
+        amenities: hostelProfile.amenities?.map((a: any) => ({
+          name: a.name,
+          description: a.description || '',
+          available: a.available,
+        })) || [],
       },
+      similarRooms: similarRooms.map(r => ({
+        _id: r._id.toString(),
+        name: r.name,
+        rent: r.rent,
+        coverImage: r.images?.find((img: any) => img.isCover)?.url || r.images?.[0]?.url,
+      })),
+      otherHostels: otherHostelProfiles
+        .filter(h => h.hostel) // Filter out profiles without hostel reference
+        .map(h => ({
+          _id: h.hostel.toString(),
+          slug: h.slug || '',
+          name: h.basicInfo.name,
+          city: h.basicInfo.city,
+          coverImage: h.media?.photos?.[0]?.url,
+        })),
     };
   } catch (error) {
     console.error('Error fetching room by ID:', error);

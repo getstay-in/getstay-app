@@ -165,4 +165,50 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  
+  /* Animation Delays */
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+  
+  .delay-700 {
+    animation-delay: 700ms;
+  }
+  
+  .delay-1000 {
+    animation-delay: 1000ms;
+  }
+  
+  /* Custom Scrollbar Styles */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+  
+  .scrollbar-thumb-brand-primary\/20::-webkit-scrollbar-thumb {
+    background-color: rgba(57, 50, 216, 0.2);
+    border-radius: 9999px;
+  }
+  
+  .scrollbar-thumb-brand-primary\/30::-webkit-scrollbar-thumb {
+    background-color: rgba(57, 50, 216, 0.3);
+    border-radius: 9999px;
+  }
+  
+  .scrollbar-thumb-brand-primary\/40::-webkit-scrollbar-thumb {
+    background-color: rgba(57, 50, 216, 0.4);
+    border-radius: 9999px;
+  }
+  
+  .scrollbar-track-transparent::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  .hover\:scrollbar-thumb-brand-primary\/40:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(57, 50, 216, 0.4);
+  }
 }
