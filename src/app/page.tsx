@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     description: "Find the best hostels and PG accommodations in Bhopal. Modern amenities, safe environment, affordable prices. Book now and get 20% off!",
     images: [{ url: "/banners/BANNER1.png", width: 1200, height: 630, alt: "GetStay - Hostel Booking in Bhopal" }],
     type: "website",
-    url: "https://getstay.com",
+    url: "https://getstay.in",
     siteName: "GetStay",
     locale: "en_IN",
   },
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     site: "@GetStay",
   },
   alternates: {
-    canonical: "https://getstay.com",
+    canonical: "https://getstay.in",
   },
   robots: {
     index: true,
@@ -77,11 +77,11 @@ export default async function Home() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'GetStay',
-    url: 'https://getstay.com',
+    url: 'https://getstay.in',
     description: 'Find the best hostels and PG accommodations in Bhopal and across India',
     potentialAction: {
       '@type': 'SearchAction',
-      target: 'https://getstay.com/search?q={search_term_string}',
+      target: 'https://getstay.in/search?q={search_term_string}',
       'query-input': 'required name=search_term_string',
     },
   };
@@ -90,8 +90,8 @@ export default async function Home() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'GetStay',
-    url: 'https://getstay.com',
-    logo: 'https://getstay.com/logo.png',
+    url: 'https://getstay.in',
+    logo: 'https://getstay.in/logo.png',
     description: 'Leading hostel and PG accommodation booking platform in Bhopal',
     address: {
       '@type': 'PostalAddress',

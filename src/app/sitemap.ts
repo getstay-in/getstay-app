@@ -10,28 +10,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const cityCategories = await getCityCategoryPaths();
 
   const hostelPages = slugs.map((slug) => ({
-    url: `https://getstay.com/hostel/${slug}`,
+    url: `https://getstay.in/hostel/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
 
   const roomPages = roomIds.map((id) => ({
-    url: `https://getstay.com/room/${id}`,
+    url: `https://getstay.in/room/${id}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));
 
   const cityPages = cities.map((city) => ({
-    url: `https://getstay.com/city/${city.slug}`,
+    url: `https://getstay.in/city/${city.slug}`,
     lastModified: new Date(),
     changeFrequency: 'daily' as const,
     priority: 0.9,
   }));
 
   const categoryPages = cityCategories.map((path) => ({
-    url: `https://getstay.com/city/${path.citySlug}/${path.category}`,
+    url: `https://getstay.in/city/${path.citySlug}/${path.category}`,
     lastModified: new Date(),
     changeFrequency: 'daily' as const,
     priority: 0.85,
@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     {
-      url: 'https://getstay.com',
+      url: 'https://getstay.in',
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,

@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: RoomPageProps): Promise<Metad
       title,
       description,
       type: 'website',
-      url: `https://getstay.com/room/${id}`,
+      url: `https://getstay.in/room/${id}`,
       siteName: 'GetStay',
       locale: 'en_IN',
       images: coverImage ? [
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: RoomPageProps): Promise<Metad
       images: coverImage ? [coverImage] : [],
     },
     alternates: {
-      canonical: `https://getstay.com/room/${id}`,
+      canonical: `https://getstay.in/room/${id}`,
     },
     robots: {
       index: true,
@@ -131,19 +131,19 @@ export default async function RoomPage({ params }: RoomPageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://getstay.com',
+        item: 'https://getstay.in',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: room.hostel.name,
-        item: `https://getstay.com/hostel/${room.hostel.slug}`,
+        item: `https://getstay.in/hostel/${room.hostel.slug}`,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: room.name,
-        item: `https://getstay.com/room/${id}`,
+        item: `https://getstay.in/room/${id}`,
       },
     ],
   };

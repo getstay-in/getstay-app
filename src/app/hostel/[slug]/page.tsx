@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: HostelPageProps): Promise<Met
       title,
       description,
       type: 'website',
-      url: `https://getstay.com/hostel/${slug}`,
+      url: `https://getstay.in/hostel/${slug}`,
       siteName: 'GetStay',
       locale: 'en_IN',
       images: mainPhoto ? [
@@ -98,7 +98,7 @@ export async function generateMetadata({ params }: HostelPageProps): Promise<Met
       site: '@GetStay',
     },
     alternates: {
-      canonical: `https://getstay.com/hostel/${slug}`,
+      canonical: `https://getstay.in/hostel/${slug}`,
     },
     robots: {
       index: true,
@@ -143,10 +143,10 @@ export default async function HostelPage({ params }: HostelPageProps) {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'LodgingBusiness',
-    '@id': `https://getstay.com/hostel/${slug}`,
+    '@id': `https://getstay.in/hostel/${slug}`,
     name: hostel.basicInfo.name,
     description: hostel.basicInfo.description || `${hostel.basicInfo.name} - Modern hostel accommodation`,
-    url: `https://getstay.com/hostel/${slug}`,
+    url: `https://getstay.in/hostel/${slug}`,
     image: hostel.media.photos.map(p => p.url),
     address: {
       '@type': 'PostalAddress',
@@ -192,19 +192,19 @@ export default async function HostelPage({ params }: HostelPageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://getstay.com',
+        item: 'https://getstay.in',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Hostels',
-        item: 'https://getstay.com/#hostels',
+        item: 'https://getstay.in/#hostels',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: hostel.basicInfo.name,
-        item: `https://getstay.com/hostel/${slug}`,
+        item: `https://getstay.in/hostel/${slug}`,
       },
     ],
   };

@@ -88,7 +88,7 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
       title,
       description,
       type: 'website',
-      url: `https://getstay.com/city/${citySlug}`,
+      url: `https://getstay.in/city/${citySlug}`,
       siteName: 'GetStay',
       locale: 'en_IN',
     },
@@ -99,7 +99,7 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
       site: "@GetStay",
     },
     alternates: {
-      canonical: `https://getstay.com/city/${citySlug}`,
+      canonical: `https://getstay.in/city/${citySlug}`,
     },
     robots: {
       index: true,
@@ -154,7 +154,7 @@ export default async function CityPage({ params }: CityPageProps) {
       item: {
         '@type': 'LodgingBusiness',
         name: hostel.name,
-        url: `https://getstay.com/hostel/${hostel.slug}`,
+        url: `https://getstay.in/hostel/${hostel.slug}`,
         address: {
           '@type': 'PostalAddress',
           addressLocality: hostel.city,
@@ -173,13 +173,13 @@ export default async function CityPage({ params }: CityPageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://getstay.com',
+        item: 'https://getstay.in',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: `${city.name} Hostels`,
-        item: `https://getstay.com/city/${citySlug}`,
+        item: `https://getstay.in/city/${citySlug}`,
       },
     ],
   };
