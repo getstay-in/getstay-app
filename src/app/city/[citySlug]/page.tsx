@@ -138,18 +138,9 @@ export default async function CityPage({ params }: CityPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
 
-      <Header />
+      <Header pageTitle={`${city.name} Hostels`} showBackButton={true} />
       
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex items-center gap-2 text-sm text-muted-foreground">
-            <li><Link href="/" className="hover:text-foreground">Home</Link></li>
-            <li>/</li>
-            <li className="text-foreground" aria-current="page">{city.name} Hostels</li>
-          </ol>
-        </nav>
-
         {/* Hero Section */}
         <div className="mb-8">
           <h1 className="mb-3 text-4xl font-bold sm:text-5xl">

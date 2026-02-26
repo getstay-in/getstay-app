@@ -42,7 +42,7 @@ export default async function Home() {
     <div className="min-h-screen bg-background">
       <Header />
       <PromoBanner />
-      <HeroSection />
+      {/* <HeroSection /> */}
       <HostelsSection hostels={hostels} />
       <RoomsSection initialRooms={rooms} />
       <CitiesSection cities={cities} />

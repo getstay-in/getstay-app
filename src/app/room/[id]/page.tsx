@@ -158,26 +158,9 @@ export default async function RoomPage({ params }: RoomPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
 
-      <Header />
+      <Header pageTitle={room.name} showBackButton={true} />
       
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex items-center gap-2 text-sm text-muted-foreground">
-            <li>
-              <Link href="/" className="hover:text-foreground">Home</Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link href={`/hostel/${room.hostel.slug}`} className="hover:text-foreground">
-                {room.hostel.name}
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-foreground" aria-current="page">{room.name}</li>
-          </ol>
-        </nav>
-
         {/* Back Button */}
         <Link href={`/hostel/${room.hostel.slug}`}>
           <Button variant="ghost" className="mb-4">

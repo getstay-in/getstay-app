@@ -65,6 +65,10 @@ export interface HostelDetailProfile {
     }>;
   };
   media: {
+    banner?: {
+      url: string;
+      publicId: string;
+    };
     photos: HostelPhoto[];
     virtualTourLink?: string;
   };

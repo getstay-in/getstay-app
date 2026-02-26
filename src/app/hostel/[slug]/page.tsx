@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RoomCard } from "@/components/hostel/room-card";
 import { DescriptionCard } from "@/components/shared/description-card";
+import { AnimatedBanner } from "@/components/hostel/animated-banner";
 import { getHostelDetailBySlug, getHostelSlugsForSSG } from "@/services/hostel-detail.service";
 
 interface HostelPageProps {
@@ -215,29 +216,35 @@ export default async function HostelPage({ params }: HostelPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
 
-      <Header />
+      <Header pageTitle={hostel.basicInfo.name} showBackButton={true} />
       
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Breadcrumb Navigation for SEO */}
-        <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex items-center gap-2 text-sm text-muted-foreground">
-            <li>
-              <a href="/" className="hover:text-foreground">Home</a>
-            </li>
-            <li>/</li>
-            <li>
-              <a href="/#hostels" className="hover:text-foreground">Hostels</a>
-            </li>
-            <li>/</li>
-            <li className="text-foreground" aria-current="page">{hostel.basicInfo.name}</li>
-          </ol>
-        </nav>
+        {/* Banner Section with Hostel Info */}
+        <div className="mb-8 overflow-hidden rounded-2xl border border-border bg-gradient-to-r from-brand-primary/10 via-brand-secondary/10 to-brand-accent/10">
+          <div className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:gap-8 lg:p-8">
+            {/* Banner Image - 1:1 Aspect Ratio */}
+            <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-xl border border-border sm:w-48 lg:w-64">
+              {hostel.media.banner?.url ? (
+                <Image
+                  src={hostel.media.banner.url}
+                  alt={`${hostel.basicInfo.name} - Banner`}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <AnimatedBanner
+                  hostelName={hostel.basicInfo.name}
+                  location={location}
+                  totalRooms={hostel.propertyDetails.totalRooms}
+                  accommodationType={hostel.propertyDetails.accommodationType}
+                />
+              )}
+            </div>
 
-        {/* Hero Section with Images */}
-        <div className="mb-8">
-          <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <h1 className="mb-2 text-3xl font-bold sm:text-4xl">{hostel.basicInfo.name}</h1>
+            {/* Hostel Info */}
+            <div className="flex-1 min-w-0">
+              <h1 className="mb-3 text-3xl font-bold sm:text-4xl lg:text-5xl">{hostel.basicInfo.name}</h1>
               <div className="flex flex-wrap items-center gap-3">
                 {location && (
                   <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -251,9 +258,17 @@ export default async function HostelPage({ params }: HostelPageProps) {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Image Gallery */}
-          {hostel.media.photos.length > 0 && (
+        {/* Description */}
+        {hostel.basicInfo.description && (
+          <DescriptionCard description={hostel.basicInfo.description} />
+        )}
+
+        {/* Image Gallery */}
+        {hostel.media.photos.length > 0 && (
+          <div className="mb-8">
+            <h2 className="mb-4 text-2xl font-bold">Gallery</h2>
             <div className="grid gap-2 sm:grid-cols-4 sm:grid-rows-2">
               {mainPhoto && (
                 <div className="relative h-64 overflow-hidden rounded-lg sm:col-span-2 sm:row-span-2 sm:h-[400px]">
@@ -262,7 +277,6 @@ export default async function HostelPage({ params }: HostelPageProps) {
                     alt={`${hostel.basicInfo.name} - ${mainPhoto.title}`}
                     fill
                     className="object-cover"
-                    priority
                     itemProp="image"
                   />
                 </div>
@@ -279,12 +293,7 @@ export default async function HostelPage({ params }: HostelPageProps) {
                 </div>
               ))}
             </div>
-          )}
-        </div>
-
-        {/* Description */}
-        {hostel.basicInfo.description && (
-          <DescriptionCard description={hostel.basicInfo.description} />
+          </div>
         )}
 
         <div className="grid gap-6 lg:grid-cols-3">

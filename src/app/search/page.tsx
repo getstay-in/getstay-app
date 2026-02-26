@@ -233,6 +233,24 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    }>
+      <SearchPageContent />
+    </Suspense>
+  );
+}
+
+function SearchPageContent() {
+  return (
     <div className="min-h-screen bg-background">
       <Header />
       <Suspense fallback={
